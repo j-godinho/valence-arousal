@@ -88,20 +88,21 @@ def get_results(predicted, y_test, scaler):
 	print("Mean Squared Error (Arousal):",	mean_squared_error(test_arousal_predict, y_arousal_test))
 
 
-def load_embeddings(args):
-	# If args.fasttext use the complete model from fasttext able of predicting out of vocabulary words
-	# Else use just the pre trained vectors	
+def load_embeddings(args):	
 	if(args.fasttext):
 		embeddings_dict = FastText.load_fasttext_format(args.fasttext) 
+	elif(args.emb):
+		embeddings_dict = np.load(args.emb).item()
 	else:
-		embeddings_dict = np.load('embeddings_dict.npy').item()
+		print("Error - No embeddings specified")
 
-	return embeddings_dict, len(embeddings_dict["the"])
+	return embeddings_dict, len(embeddings_dict['the'])
 
 def receive_arguments():
 	parser = argparse.ArgumentParser()
 	parser.add_argument("--wordratings", help="path to dataset file", type=str, required=True)
 	parser.add_argument("--fasttext", help="use fasttext embeddings?", type=str, required=False)
+	parser.add_argument("--emb", help="pre trained vector embedding file", type=str, required=False)
 	args = parser.parse_args()
 	return args
 

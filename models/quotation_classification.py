@@ -43,23 +43,14 @@ from custom_layers.Attention import *
 
 
 def load_embeddings(args):	
-	print("[Load Embeddings]")
 	if(args.fasttext):
 		embeddings_dict = FastText.load_fasttext_format(args.fasttext) 
+	elif(args.emb):
+		embeddings_dict = np.load(args.emb).item()
 	else:
-		embeddings_dict = np.load('embeddings_dict.npy').item()
+		print("Error - No embeddings specified")
 
 	return embeddings_dict, len(embeddings_dict['the'])
-
-	#embeddings_dict = {}
-	#with open(args.emb, 'r') as emb_file:
-	#    header = emb_file.readline().split()
-	#    n_embeddings, emb_dim = int(header[0]), int(header[1])
-	#    for l in emb_file:
-	#        line = l.split()
-	#        word, coefs = line[0], np.asarray(line[1:(emb_dim + 1)], dtype='float32')
-	#        embeddings_dict[word] = coefs	
-	#return embeddings_dict, n_embeddings, emb_dim
 
 def load_data(args):
 	#load facebook dataset	
@@ -256,6 +247,7 @@ def receive_arguments():
 	parser = argparse.ArgumentParser()
 	parser.add_argument("--data", help="path to dataset file", type=str, required=True)
 	parser.add_argument("--fasttext", help="use fasttext embeddings?", type=str, required=False)
+	parser.add_argument("--emb", help="pre trained vector embedding file", type=str, required=False)
 	parser.add_argument("--wordratings", help="path to word ratings model", type=str, required=False)
 	parser.add_argument("--k", help="number of foldings", type=int, required=True)
 	parser.add_argument("--attention", help="use attention layer", action="store_true")

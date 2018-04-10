@@ -31,21 +31,12 @@ except:
 def load_embeddings(args):	
 	if(args.fasttext):
 		embeddings_dict = FastText.load_fasttext_format(args.fasttext) 
+	elif(args.emb):
+		embeddings_dict = np.load(args.emb).item()
 	else:
-		embeddings_dict = np.load('embeddings_dict.npy').item()
+		print("Error - No embeddings specified")
 
 	return embeddings_dict, len(embeddings_dict['the'])
-
-	#embeddings_dict = {}
-	#with open(args.emb, 'r') as emb_file:
-	#    header = emb_file.readline().split()
-	#    n_embeddings, emb_dim = int(header[0]), int(header[1])
-	#    for l in emb_file:
-	#        line = l.split()
-	#        word, coefs = line[0], np.asarray(line[1:(emb_dim + 1)], dtype='float32')
-	#        embeddings_dict[word] = coefs	
-	#return embeddings_dict, n_embeddings, emb_dim
-
 
 def get_word_classification(args, embeddings, emb_dim):
 	dataset = pd.read_csv(args.wordratings)
@@ -163,6 +154,7 @@ def plot_figure(test_valence_predict, y_valence_test, test_arousal_predict, y_ar
 def receive_arguments():
 	parser = argparse.ArgumentParser()
 	parser.add_argument("--fasttext", help="path to Fasttext binary file", type=str, required=False)
+	parser.add_argument("--emb", help="pre trained vector embedding file", type=str, required=False)
 	parser.add_argument("--wordratings", help="path to word ratings file", type=str, required=False)
 	args = parser.parse_args()
 	return args

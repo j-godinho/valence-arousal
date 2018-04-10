@@ -139,8 +139,10 @@ def k_fold(args, X, Y, scaler):
 def load_embeddings(args):	
 	if(args.fasttext):
 		embeddings_dict = FastText.load_fasttext_format(args.fasttext) 
+	elif(args.emb):
+		embeddings_dict = np.load(args.emb).item()
 	else:
-		embeddings_dict = np.load('embeddings_dict.npy').item()
+		print("Error - No embeddings specified")
 
 	return embeddings_dict, len(embeddings_dict['the'])
 
@@ -149,6 +151,7 @@ def receive_arguments():
 	parser.add_argument("--data", help="path to dataset file", type=str, required=True)
 	parser.add_argument("--dimension", help="test <valence> or <arousal>?", type=str, required=True)
 	parser.add_argument("--type", help="<bag> or <average>", type=str, required=True)
+	parser.add_argument("--emb", help="pre trained vector embedding file", type=str, required=False)
 	parser.add_argument("--fasttext", help="use fasttext embeddings?", type=str, required=False)
 	parser.add_argument("--k", help="number of foldings", type=int, required=True)
 	args = parser.parse_args()
