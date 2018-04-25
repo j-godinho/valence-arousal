@@ -36,8 +36,8 @@ def load_data(args):
 	Y = np.concatenate((valences, arousals), axis=1)
 	
 	# Normalization
-	scaler = MinMaxScaler(feature_range=(0,9))
-	Y = scaler.fit_transform(Y) / 9
+	scaler = MinMaxScaler(feature_range=(-1,1))
+	Y = scaler.fit_transform(Y)
 
 	return words, Y, scaler
 
@@ -67,10 +67,7 @@ def build_model(X, Y, scaler):
 
 def get_results(predicted, y_test, scaler):
 	# Remove Normalization
-	predicted *= 9
 	predicted = scaler.inverse_transform(predicted)
-
-	y_test *= 9
 	y_test = scaler.inverse_transform(y_test)
 
 	y_valence_test = y_test[:,0]

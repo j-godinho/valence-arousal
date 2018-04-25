@@ -17,7 +17,7 @@ from sklearn.model_selection import KFold
 
 import keras
 from keras.models import Sequential, Model
-from keras.layers import Dense, Activation, Embedding, LSTM, Flatten, Dropout, TimeDistributed, Bidirectional, InputLayer, Input, GRU, concatenate
+from keras.layers import Dense, Activation, Embedding, LSTM, Flatten, Dropout, TimeDistributed, Bidirectional, InputLayer, Input, GRU, concatenate, GlobalMaxPooling1D
 from keras.utils import plot_model
 from keras.preprocessing import sequence
 from keras import optimizers
@@ -53,6 +53,8 @@ def load_embeddings(args):
 	return embeddings_dict, len(embeddings_dict['the'])
 
 def load_data(args):
+	print("[LOADING DATA]")
+
 	#load facebook dataset	
 	if("facebook" in args.data):	
 		dataset = pd.read_csv(args.data)
@@ -68,11 +70,11 @@ def load_data(args):
 		maximum = 5
 	
 	# Normalization
-	scalerV = MinMaxScaler(feature_range=(0, maximum))
-	scalerA = MinMaxScaler(feature_range=(0, maximum))
+	scalerV = MinMaxScaler(feature_range=(-1, 1))
+	scalerA = MinMaxScaler(feature_range=(-1, 1))
 	
-	valences = scalerV.fit_transform(valences) / maximum
-	arousals = scalerA.fit_transform(arousals) / maximum
+	valences = scalerV.fit_transform(valences)
+	arousals = scalerA.fit_transform(arousals)
 
 	words = set()	
 	for sentence in sentences:
@@ -100,6 +102,8 @@ def k_fold(args, embeddings, emb_dim, vocab_size, max_len, words, X, Y, scalerV,
 	valence_mae = []
 	arousal_mae = [] 
 
+	print("[K FOLD]")
+	
 	i = 0
 	kfold = KFold(n_splits=args.k, random_state=2)
 	for train, test in kfold.split(X):
@@ -141,7 +145,6 @@ def build_model(args, embeddings, emb_dim, vocab_size, max_len, words):
 
 	# Embedding layer
 	embeddings_matrix = np.zeros((vocab_size+1, emb_dim))
-	embeddings_matrix[0] *= 0
 
 	for index, word in enumerate(words, start=1):
 		try:
@@ -155,12 +158,11 @@ def build_model(args, embeddings, emb_dim, vocab_size, max_len, words):
 	embedding_layer = Embedding(embeddings_matrix.shape[0], 
 								embeddings_matrix.shape[1], 
 								weights = [embeddings_matrix],
-								input_length=max_len,
 								mask_zero=True,
 								trainable=False)(input_layer)
 
 	layer1 = TimeDistributed(dense_layer)(embedding_layer)
-	
+
 	# Recurrent layer. Either LSTM or GRU
 	if(args.rnn == "LSTM"):
 		rnn_layer = LSTM(units=64, return_sequences=(args.attention or args.maxpooling))
@@ -183,21 +185,18 @@ def build_model(args, embeddings, emb_dim, vocab_size, max_len, words):
 	else:
 		connection = rnn
 
-	# TODO make some experiences regarding dropout on the full system
-	#dropout = Dropout(0.2)(connection)
-
-	valence_output = Dense(1, activation="sigmoid", name="valence_output")(connection)
-	arousal_output = Dense(1, activation="sigmoid", name="arousal_output")(connection)
+	valence_output = Dense(1, activation="tanh", name="valence_output")(connection)
+	arousal_output = Dense(1, activation="tanh", name="arousal_output")(connection)
 
 	# Build Model
 	model = Model(inputs=[input_layer], outputs=[valence_output, arousal_output])
-
 	return model
 
 
 def train_predict_model(model, x_train, x_test, y_valence_train, y_valence_test, y_arousal_train, y_arousal_test, scalerV, scalerA):
 
 	earlyStopping = EarlyStopping(patience=1)
+	#3x10ª-4
 	adamOpt = keras.optimizers.Adam(lr=0.001)
 
 	# Compilation
@@ -222,11 +221,11 @@ def train_predict_model(model, x_train, x_test, y_valence_train, y_valence_test,
 	y_arousal_test = y_arousal_test.reshape(-1, 1)
 	
 	# Remove normalization
-	maximum = scalerV.get_params()['feature_range'][1]
-	test_valence_predict *= maximum
-	test_arousal_predict *= maximum
-	y_valence_test *= maximum
-	y_arousal_test *= maximum
+	#maximum = scalerV.get_params()['feature_range'][1]
+	#test_valence_predict *= maximum
+	#test_arousal_predict *= maximum
+	#y_valence_test *= maximum
+	#y_arousal_test *= maximum
 
 	test_valence_predict = scalerV.inverse_transform(test_valence_predict)
 	test_arousal_predict = scalerA.inverse_transform(test_arousal_predict)

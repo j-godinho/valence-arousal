@@ -33,22 +33,22 @@ def load_data(args):
 		sentences = np.array(dataset["Anonymized Message"])
 		arousals = np.array(dataset["Arousal_mean"]).reshape(-1, 1)
 		valences = np.array(dataset["Valence_mean"]).reshape(-1, 1)
-		maximum = 9
+		maximum = 8
 	else:
 		dataset = pd.read_csv(args.data, sep='\\t')
 		sentences = np.array(dataset["sentence"])
 		arousals = np.array(dataset["Arousal"]).reshape(-1, 1)
 		valences = np.array(dataset["Valence"]).reshape(-1, 1)
-		maximum = 5
+		maximum = 4
 
-	scaler = MinMaxScaler(feature_range=(0, maximum))
+	#scaler = MinMaxScaler(feature_range=(0, maximum))
 
 	if(args.dimension == "valence"):
-		valences = scaler.fit_transform(valences) / maximum
-		return sentences, valences, scaler	
+		valences = (valences - 1) / maximum
+		return sentences, valences, maximum	
 	else:
-		arousals = scaler.fit_transform(arousals) / maximum
-		return sentences, arousals, scaler
+		arousals = (arousals - 1) / maximum
+		return sentences, arousals, maximum
 
 def encode_data(args, sentences):
 	# Words list
@@ -91,19 +91,20 @@ def average_embeddings(X, sentences, words, embeddings, emb_dim):
 			X[i] /= count
 	return X 
 
-def build_model(x_train, x_test, y_train, y_test, scaler):
+def build_model(x_train, x_test, y_train, y_test, maximum):
 	model = SVR(kernel='rbf', C=1e3, gamma=0.1)
 
 	predicted = model.fit(x_train, y_train.ravel()).predict(x_test)
 	
 	## Remove normalization
 	predicted = predicted.reshape(-1, 1)
-	predicted *= scaler.get_params()['feature_range'][1]
-	predicted  = scaler.inverse_transform(predicted)
+	#predicted *= scaler.get_params()['feature_range'][1]
+	predicted = (predicted * maximum) + 1
 
 	y_test = y_test[:,0].reshape(-1, 1)
-	y_test *= scaler.get_params()['feature_range'][1]
-	y_test = scaler.inverse_transform(y_test)
+	#y_test *= scaler.get_params()['feature_range'][1]
+	#y_test = scaler.inverse_transform(y_test)
+	y_test = (y_test * maximum ) + 1
 
 	pearson = pearsonr(predicted, y_test)[0]
 	mse = mean_squared_error(predicted, y_test)
@@ -113,7 +114,7 @@ def build_model(x_train, x_test, y_train, y_test, scaler):
 
 	return pearson, mse, mae
 
-def k_fold(args, X, Y, scaler):
+def k_fold(args, X, Y, maximum):
 	pearson = []
 	mse = []
 	mae = []
@@ -125,7 +126,7 @@ def k_fold(args, X, Y, scaler):
 		y_train = Y[train]
 		y_test = Y[test]
 	
-		p, s, a = build_model(x_train, x_test, y_train, y_test, scaler)
+		p, s, a = build_model(x_train, x_test, y_train, y_test, maximum)
 
 		pearson.append(p)
 		mse.append(s)
@@ -159,8 +160,8 @@ def receive_arguments():
 
 def main():
 	args = receive_arguments()
-	sentences, Y, scaler = load_data(args)
+	sentences, Y, maximum = load_data(args)
 	X = encode_data(args, sentences)
-	k_fold(args, X, Y, scaler)
+	k_fold(args, X, Y, maximum)
 
 main()

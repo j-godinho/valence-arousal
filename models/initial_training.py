@@ -10,8 +10,8 @@ import argparse
 import pandas as pd
 
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error, mean_absolute_error
+from sklearn.preprocessing import MinMaxScaler
 
 from scipy.stats import pearsonr
 
@@ -45,12 +45,13 @@ def get_word_classification(args, embeddings, emb_dim):
 	arousals = np.array(dataset["A.Mean.Sum"]).reshape(-1,1)
 	valences = np.array(dataset["V.Mean.Sum"]).reshape(-1,1)
 
-	# MinMaxScaler arousals and valences
-	scalerV = MinMaxScaler(feature_range=(0, 9))
-	scalerA = MinMaxScaler(feature_range=(0, 9))
+	# Normalization arousals and valences to -1 - 1 range
+	scalerA = MinMaxScaler(feature_range=(-1, 1))
+	arousals = scalerA.fit_transform(arousals)
 
-	valences = scalerV.fit_transform(valences) / 9
-	arousals = scalerA.fit_transform(arousals) / 9
+	scalerV = MinMaxScaler(feature_range=(-1, 1))
+	valences = scalerV.fit_transform(valences)
+
 
 	words_dict = {w: i for i, w in enumerate(words)}		
 	X = np.array([words_dict[word] for word in words])
@@ -84,10 +85,10 @@ def get_word_classification(args, embeddings, emb_dim):
 								trainable=False)(input_layer)
 
 	flatten = Flatten()(embedding_layer)
-	dense_layer = Dense(120, name="initial_layer", activation="tanh")
+	dense_layer = Dense(120, name="initial_layer", activation="relu")
 	connection_dense = dense_layer(flatten)
-	valence_output = Dense(1, activation="sigmoid", name="valence_output")(connection_dense)
-	arousal_output = Dense(1, activation="sigmoid", name="arousal_output")(connection_dense)
+	valence_output = Dense(1, activation="tanh", name="valence_output")(connection_dense)
+	arousal_output = Dense(1, activation="tanh", name="arousal_output")(connection_dense)
 
 	model = Model(inputs=[input_layer], outputs=[valence_output, arousal_output])
 	
@@ -108,15 +109,13 @@ def get_word_classification(args, embeddings, emb_dim):
 	# Evaluation
 	test_predict = np.array(model.predict(x_test))
 
+	test_valence_predict = test_predict[0]
+	test_arousal_predict = test_predict[1]
+
 	# Undo normalization
-	test_predict *= 9
-
-	test_valence_predict = scalerV.inverse_transform(test_predict[0])
-	test_arousal_predict = scalerA.inverse_transform(test_predict[1])
+	test_valence_predict = scalerV.inverse_transform(test_valence_predict)
+	test_arousal_predict = scalerA.inverse_transform(test_arousal_predict)
 	
-	y_valence_test *= 9
-	y_arousal_test *= 9
-
 	y_valence_test = scalerV.inverse_transform(y_valence_test)
 	y_arousal_test = scalerA.inverse_transform(y_arousal_test)
 
