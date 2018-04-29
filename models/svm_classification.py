@@ -11,7 +11,7 @@ import pandas as pd
 import nltk
 from nltk.tokenize import word_tokenize
 
-from gensim.models.wrappers import FastText
+from gensim.models import FastText
 
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.svm import SVR

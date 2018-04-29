@@ -125,7 +125,8 @@ def k_fold(args, embeddings, emb_dim, vocab_size, max_len, words, X, Y, scalerV,
 		print("Index:{0} - V_p:{1} | A_p:{2} | V_mae:{3} | A_mae:{4} | V_mse:{5} | A_mse:{6}".format(i, v_pearson, a_pearson, v_mae, a_mae, v_mse, a_mse))
 		i = i + 1
 	
-	print("[MEAN]: V_p:{} | A_p:{} | V_mae:{} | A_mae:{} | V_mse:{} | A_mse:{}".format(	np.mean(valence_cor), 
+	print("[MEAN]: args: {} | V_p:{} | A_p:{} | V_mae:{} | A_mae:{} | V_mse:{} | A_mse:{}".format(args,	
+																								np.mean(valence_cor), 
 																								np.mean(arousal_cor),
 																								np.mean(valence_mae),
 																								np.mean(arousal_mae),
