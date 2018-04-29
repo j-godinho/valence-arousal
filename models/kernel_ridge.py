@@ -10,7 +10,7 @@ import argparse
 import pandas as pd
 
 from nltk.tokenize import word_tokenize
-from gensim.models.wrappers import FastText
+from gensim.models import FastText
 import nltk
 
 from sklearn.kernel_ridge import KernelRidge

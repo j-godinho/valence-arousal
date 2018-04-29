@@ -21,7 +21,7 @@ from keras.layers import Dense, Activation, Embedding, Flatten, Dropout, InputLa
 from keras import optimizers
 from keras.callbacks import EarlyStopping
 
-from gensim.models.wrappers import FastText
+from gensim.models import FastText
 
 try: 
 	import matplotlib.pyplot as plt

@@ -27,7 +27,7 @@ from keras.callbacks import EarlyStopping
 import gc
 import math
 
-from gensim.models.wrappers import FastText
+from gensim.models import FastText
 
 import nltk
 from nltk.tokenize import word_tokenize
@@ -124,15 +124,15 @@ def k_fold(args, embeddings, emb_dim, vocab_size, max_len, words, X, Y, scalerV,
 		valence_mae.append(v_mae)
 		arousal_mae.append(a_mae)
 
-		print("Index:{0} - V_p:{1} | A_p:{2} | V_mse:{3} | A_mse:{4} | V_mae:{5} | A_mae:{6}".format(i, v_pearson, a_pearson, v_mse, a_mse, v_mae, a_mae))
+		print("Index:{0} - V_p:{1} | A_p:{2} | V_mae:{3} | A_mae:{4} | V_mse:{5} | A_mse:{6}".format(i, v_pearson, a_pearson, v_mae, a_mae, v_mse, a_mse))
 		i = i + 1
 	
-	print("[MEAN]: V_p:{} | A_p:{} | V_mse:{} | A_mse:{} | V_mae:{} | A_mae:{}".format(	np.mean(valence_cor), 
+	print("[MEAN]: V_p:{} | A_p:{} | V_mae:{} | A_mae:{} | V_mse:{} | A_mse:{}".format(	np.mean(valence_cor), 
 																								np.mean(arousal_cor),
-																								np.mean(valence_mse), 
-																								np.mean(arousal_mse),
 																								np.mean(valence_mae),
-																								np.mean(arousal_mae)))
+																								np.mean(arousal_mae),
+																								np.mean(valence_mse), 
+																								np.mean(arousal_mse)))
 	
 
 
@@ -219,14 +219,8 @@ def train_predict_model(model, x_train, x_test, y_valence_train, y_valence_test,
 	test_arousal_predict = test_predict[1].reshape(-1,1)
 	y_valence_test = y_valence_test.reshape(-1, 1)
 	y_arousal_test = y_arousal_test.reshape(-1, 1)
-	
-	# Remove normalization
-	#maximum = scalerV.get_params()['feature_range'][1]
-	#test_valence_predict *= maximum
-	#test_arousal_predict *= maximum
-	#y_valence_test *= maximum
-	#y_arousal_test *= maximum
 
+	# Remove normalization
 	test_valence_predict = scalerV.inverse_transform(test_valence_predict)
 	test_arousal_predict = scalerA.inverse_transform(test_arousal_predict)
 	y_valence_test = scalerV.inverse_transform(y_valence_test)

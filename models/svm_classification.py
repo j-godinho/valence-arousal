@@ -33,22 +33,20 @@ def load_data(args):
 		sentences = np.array(dataset["Anonymized Message"])
 		arousals = np.array(dataset["Arousal_mean"]).reshape(-1, 1)
 		valences = np.array(dataset["Valence_mean"]).reshape(-1, 1)
-		maximum = 8
 	else:
 		dataset = pd.read_csv(args.data, sep='\\t')
 		sentences = np.array(dataset["sentence"])
 		arousals = np.array(dataset["Arousal"]).reshape(-1, 1)
 		valences = np.array(dataset["Valence"]).reshape(-1, 1)
-		maximum = 4
 
-	#scaler = MinMaxScaler(feature_range=(0, maximum))
+	scaler = MinMaxScaler(feature_range=(-1, 1))
 
 	if(args.dimension == "valence"):
-		valences = (valences - 1) / maximum
-		return sentences, valences, maximum	
+		valences = scaler.fit_transform(valences)
+		return sentences, valences, scaler	
 	else:
-		arousals = (arousals - 1) / maximum
-		return sentences, arousals, maximum
+		arousals = scaler.fit_transform(arousals)
+		return sentences, arousals, scaler
 
 def encode_data(args, sentences):
 	# Words list
@@ -91,21 +89,18 @@ def average_embeddings(X, sentences, words, embeddings, emb_dim):
 			X[i] /= count
 	return X 
 
-def build_model(x_train, x_test, y_train, y_test, maximum):
+def build_model(x_train, x_test, y_train, y_test, scaler):
 	model = SVR(kernel='rbf', C=1e3, gamma=0.1)
 
 	predicted = model.fit(x_train, y_train.ravel()).predict(x_test)
 	
 	## Remove normalization
 	predicted = predicted.reshape(-1, 1)
-	#predicted *= scaler.get_params()['feature_range'][1]
-	predicted = (predicted * maximum) + 1
-
+	predicted = scaler.inverse_transform(predicted) 
+	
 	y_test = y_test[:,0].reshape(-1, 1)
-	#y_test *= scaler.get_params()['feature_range'][1]
-	#y_test = scaler.inverse_transform(y_test)
-	y_test = (y_test * maximum ) + 1
-
+	y_test = scaler.inverse_transform(y_test)
+	
 	pearson = pearsonr(predicted, y_test)[0]
 	mse = mean_squared_error(predicted, y_test)
 	mae = mean_absolute_error(predicted, y_test)
@@ -160,8 +155,8 @@ def receive_arguments():
 
 def main():
 	args = receive_arguments()
-	sentences, Y, maximum = load_data(args)
+	sentences, Y, scaler = load_data(args)
 	X = encode_data(args, sentences)
-	k_fold(args, X, Y, maximum)
+	k_fold(args, X, Y, scaler)
 
 main()
