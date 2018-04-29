@@ -61,13 +61,11 @@ def load_data(args):
 		sentences = np.array(dataset["Anonymized Message"])
 		arousals = np.array(dataset["Arousal_mean"]).reshape(-1, 1)
 		valences = np.array(dataset["Valence_mean"]).reshape(-1, 1)
-		maximum = 9
 	else:
 		dataset = pd.read_csv(args.data, sep='\\t')
 		sentences = np.array(dataset["sentence"])
 		arousals = np.array(dataset["Arousal"]).reshape(-1, 1)
 		valences = np.array(dataset["Valence"]).reshape(-1, 1)
-		maximum = 5
 	
 	# Normalization
 	scalerV = MinMaxScaler(feature_range=(-1, 1))
