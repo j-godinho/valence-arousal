@@ -75,7 +75,7 @@ def load_data(args):
 	
 	valences = scalerV.fit_transform(valences)
 	arousals = scalerA.fit_transform(arousals)
-
+	
 	words = set()	
 	for sentence in sentences:
 		for word in nltk.word_tokenize(sentence):
@@ -196,7 +196,7 @@ def build_model(args, embeddings, emb_dim, vocab_size, max_len, words):
 def train_predict_model(model, x_train, x_test, y_valence_train, y_valence_test, y_arousal_train, y_arousal_test, scalerV, scalerA):
 
 	earlyStopping = EarlyStopping(patience=1)
-	#3x10ª-4
+	#3x10-4
 	adamOpt = keras.optimizers.Adam(lr=0.001)
 
 	# Compilation
