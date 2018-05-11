@@ -143,11 +143,13 @@ def build_model(args, embeddings, emb_dim, vocab_size, max_len, words):
 		dense_layer = Dense(120, activation="tanh")
 
 	# Embedding layer
-	embeddings_matrix = np.zeros((vocab_size+1, emb_dim))
+	#embeddings_matrix = np.zeros((vocab_size+1, emb_dim))
+	embeddings_matrix = np.random.rand(vocab_size + 1, emb_dim)
+	embeddings_matrix[0] *= 0
 
 	for index, word in enumerate(words, start=1):
 		try:
-			embedding_vector = embeddings[word.lower()]
+			embedding_vector = embeddings[word]
 			embeddings_matrix[index] = embedding_vector
 		except:
 			print("Not found embedding for: <{0}>".format(word))
@@ -195,8 +197,8 @@ def build_model(args, embeddings, emb_dim, vocab_size, max_len, words):
 def train_predict_model(model, x_train, x_test, y_valence_train, y_valence_test, y_arousal_train, y_arousal_test, scalerV, scalerA):
 
 	earlyStopping = EarlyStopping(patience=1)
-	#3x10-4
-	adamOpt = keras.optimizers.Adam(lr=0.001)
+
+	adamOpt = keras.optimizers.Adam(lr=0.001, amsgrad=True)
 
 	# Compilation
 	model.compile(loss={"valence_output" : "mean_squared_error", "arousal_output" : "mean_squared_error"}, optimizer=adamOpt)
