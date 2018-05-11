@@ -63,7 +63,7 @@ def get_word_classification(args, embeddings, emb_dim):
 
 	for index, word in enumerate(words):
 		try:
-			embedding_vector = embeddings[word.lower()]
+			embedding_vector = embeddings[word]
 			embeddings_matrix[index] = embedding_vector
 		except:
 			print("Not found embedding for: <{0}>".format(word))

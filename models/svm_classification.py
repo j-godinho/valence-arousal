@@ -80,7 +80,7 @@ def average_embeddings(X, sentences, words, embeddings, emb_dim):
 		count = 0
 		for word in nltk.word_tokenize(sentences[i]):
 			try:
-				embedding_vector = embeddings[word.lower()]
+				embedding_vector = embeddings[word]
 				X[i] = np.add(X[i], embedding_vector)
 				count += 1
 			except:

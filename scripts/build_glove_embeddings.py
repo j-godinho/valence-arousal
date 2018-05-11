@@ -21,7 +21,7 @@ def calculate_oov_token(embeddings, token):
 	#print("Closest words to <{}> : {}, {} | Dist: {}".format(token, near[0], near[1], word_vector))
 	return word_vector
 
-def calculate_vectors(embeddings, words):
+def calculate_vectors(embeddings, words, name):
 	data = {}
 	for index, word in enumerate(words, start=1):
 		try:
@@ -30,7 +30,7 @@ def calculate_vectors(embeddings, words):
 			#print("Adding to file: <{0}>".format(word))
 			data[word] = calculate_oov_token(embeddings, word)
 
-	np.save("glove_embeddings.npy", data)
+	np.save("glove_embeddings{}.npy".format(name), data)
 
 def read_embeddings_file(args):
 	print ("Reading Embeddings File")
@@ -57,7 +57,9 @@ def load_data(args):
 		sentences = np.array(dataset["sentence"])
 		data_type = 0
 		name = "combination.embs"
-	elif("warriner" in args.data):
+	elif("Warriner" in args.data):
+		dataset = pd.read_csv(args.data)
+		words = np.array(dataset["Word"])
 		data_type = 1
 		name = "warriner.embs"
 
@@ -81,6 +83,6 @@ def main():
 	args = receive_arguments()
 	words, name = load_data(args)
 	embeddings = read_embeddings_file(args)
-	calculate_vectors(embeddings, words)
+	calculate_vectors(embeddings, words, name)
 
 main()
