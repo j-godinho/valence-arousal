@@ -47,7 +47,7 @@ def encode_data(args, words):
 	X = np.zeros((len(words) , emb_dim))
 	for i, word in enumerate(words):
 		try:
-			embedding_vector = embeddings[word.lower()]
+			embedding_vector = embeddings[word]
 			X[i] = embedding_vector
 		except:
 			print("Not found embedding for: <{0}>".format(word))
@@ -93,7 +93,7 @@ def load_embeddings(args):
 	else:
 		print("Error - No embeddings specified")
 
-	return embeddings_dict, len(embeddings_dict['the'])
+	return embeddings_dict, 300
 
 def receive_arguments():
 	parser = argparse.ArgumentParser()

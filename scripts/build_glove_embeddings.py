@@ -28,8 +28,12 @@ def calculate_vectors(embeddings, words, name):
 			data[word] = embeddings[word]
 		except:
 			#print("Adding to file: <{0}>".format(word))
-			data[word] = calculate_oov_token(embeddings, word)
+			try:
+				data[word] = calculate_oov_token(embeddings, word)
+			except:
+				print("Unknown Error on line: {}".format(word))
 
+	print(len(words), len(data.keys()))
 	np.save("glove_embeddings{}.npy".format(name), data)
 
 def read_embeddings_file(args):
@@ -37,6 +41,7 @@ def read_embeddings_file(args):
 	embeddings = dict()
 	f = open(args.glove, encoding="utf8")
 	for line in f:
+		#print (line)
 		values = line.split(' ')
 		word = values[0]
 		coefs = np.asarray(values[1:], dtype='float32')
@@ -53,7 +58,7 @@ def load_data(args):
 		data_type = 0
 		name = "facebook.embs"
 	elif("combination" in args.data):
-		dataset = pd.read_csv(args.data, sep='\\t')
+		dataset = pd.read_csv(args.data, sep='\t')
 		sentences = np.array(dataset["sentence"])
 		data_type = 0
 		name = "combination.embs"
@@ -63,8 +68,8 @@ def load_data(args):
 		data_type = 1
 		name = "warriner.embs"
 
-	words = set()	
 	if(data_type == 0):
+		words = set()	
 		for sentence in sentences:
 			for word in nltk.word_tokenize(sentence):
 				words.add(word)

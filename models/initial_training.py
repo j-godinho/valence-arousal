@@ -36,7 +36,7 @@ def load_embeddings(args):
 	else:
 		print("Error - No embeddings specified")
 
-	return embeddings_dict, len(embeddings_dict['the'])
+	return embeddings_dict, 300
 
 def get_word_classification(args, embeddings, emb_dim):
 	dataset = pd.read_csv(args.wordratings)
@@ -92,7 +92,7 @@ def get_word_classification(args, embeddings, emb_dim):
 
 	model = Model(inputs=[input_layer], outputs=[valence_output, arousal_output])
 	
-	adamOpt = keras.optimizers.Adam(lr=0.001)
+	adamOpt = keras.optimizers.Adam(lr=0.001, amsgrad=True)
 	earlyStopping = EarlyStopping(patience=1)
 
 	# Compilation
