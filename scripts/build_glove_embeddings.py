@@ -57,7 +57,7 @@ def load_data(args):
 		sentences = np.array(dataset["Anonymized Message"])
 		data_type = 0
 		name = "facebook.embs"
-	elif("combination" in args.data):
+	elif("emo" in args.data):
 		dataset = pd.read_csv(args.data, sep='\t')
 		sentences = np.array(dataset["sentence"])
 		data_type = 0
@@ -67,7 +67,22 @@ def load_data(args):
 		words = np.array(dataset["Word"])
 		data_type = 1
 		name = "warriner.embs"
-
+	elif("ANET" in args.data):
+		dataset = pd.read_csv(args.data, sep='\t')
+		sentences = np.array(dataset["Sentence"])
+		data_type = 0
+		name = "anet.embs"
+	elif("nrc" in args.data):
+		dataset = pd.read_csv(args.data, sep='\t')
+		words = np.array(dataset['word1'])
+		data_type = 1
+		name = "nrc.embs"
+	elif("word_combination" in args.data):
+		dataset = pd.read_csv(args.data, sep='\t')
+		words = np.array(dataset['Description'])
+		data_type = 1
+		name = "word_combination.embs"
+		
 	if(data_type == 0):
 		words = set()	
 		for sentence in sentences:

@@ -26,12 +26,12 @@ except:
 	print("Failed to import matplotlib")	
 
 def load_data(args):
-	dataset = pd.read_csv(args.wordratings)
+	dataset = pd.read_csv(args.wordratings, sep='\t')
 
-	words = np.array(dataset["Word"])
+	words = np.array(dataset["Description"])
 
-	valences = np.array(dataset["V.Mean.Sum"]).reshape(-1,1)
-	arousals = np.array(dataset["A.Mean.Sum"]).reshape(-1,1)
+	valences = np.array(dataset["Valence_value"]).reshape(-1,1)
+	arousals = np.array(dataset["Arousal_value"]).reshape(-1,1)
 
 	Y = np.concatenate((valences, arousals), axis=1)
 	

@@ -1,0 +1,121 @@
+ANET#	PlMN	PlSD	AroMN	AroSD	DomMN	DomSD	Set	Sentence
+1300	2.86	1.85	7.71	1.77	3.51	2.13	A	The dog strains forward, snarling, and suddenly leaps out at you.
+1350	2.98	1.74	7.1	1.84	3.91	2.12	B	You jump back, muscles tense, as the large dog strains against the chain, slobbering with teeth bared, leaping and snarling in a crazy rage.
+1460	7.44	1.71	3.53	2.28	6.69	1.82	A	Your new kitten nestles comfortably in your lap as you stroke her fur.
+1500	1.89	1.54	7.94	1.79	2.27	1.92	A	The snake darts forward, jaws open, and sinks its fangs into your leg.
+1620	7.16	1.49	4.63	1.82	5.31	1.76	A	Hiking around the national park, you see a fawn nuzzling her mother.
+1940	1.81	1.29	8	1.77	2.58	1.89	B	You awake, heart pounding, startled in the darkness.  A snake has crawled into your sleeping bag.  It slides along your leg. You struggle frantically trying to get out.
+1950	4.2	1.92	5.81	2.15	5.27	2.36	B	You watch a giant snake coiled in a display case.  You freeze, as the snake’s eyes move in your direction, and a red forked-tongue darts out.
+1960	1.7	1.21	7.65	2.11	2.32	1.73	B	You step on something in the leaves, and suddenly a snake – mouth gaping, fangs protruding—is hurtling at you. It strikes; you feel a sharp, stabbing pain.
+2120	5.36	1.53	4.06	1.85	5.68	1.57	A	You wash and rinse the dishes in the sink while your roommate vacuums.
+2130	7.41	1.42	2.21	1.6	6.76	1.77	B	You are lying in bed on a Sunday morning, half asleep and listening to the distant sound of bells, relaxing on your day off.
+2210	6.65	1.59	2.31	1.6	6.5	1.78	B	It’s a quiet day without much to do.  You’re sitting around your place, resting, reading, and looking out the window-- where leaves swirl gently in the wind.
+2222	6.34	1.68	5.31	2.22	6.28	1.98	A	You concentrate fully, hearing nothing, as you play your new video game.
+2230	6.08	1.41	3.43	2.08	6.37	1.72	A	You sit at the kitchen table, drinking your morning coffee and reading the paper.
+2240	6.74	1.7	2.27	1.68	6.83	1.83	B	It’s good to be able to do nothing and just stretch out on the couch.  The television is on with the sound off.  You can hear the low rumble of traffic in the distance.
+2250	6.44	1.56	2.63	1.71	6.48	1.67	B	You are relaxing on a lawn chair, looking out into the garden. A child’s tricycle is abandoned on the grass.  You hear the low buzz of a lawn mower in the distance.
+2380	8.47	1.31	5.47	2.38	7.88	1.64	B	It’s a beautiful day and you’re heading a new convertible to the beach.  The CD player is blasting, and you’re singing along at the top of your voice.
+2500	2.08	1.32	7.55	1.96	2.31	1.58	B	Panic comes out of the blue.  No warning.  Your heart’s racing.  You can’t get your breath.  Thoughts whirl:  “I’m going crazy. Am I going to die?”
+2510	1.78	1.26	7.69	1.86	2.08	1.71	B	People are all around you, pressing closer.  It’s hard to breath.  You’re flushed, sweaty, dizzy—confused.  You realize it’s another attack and this time, you think, “I will die.”
+2520	5.65	1.3	3.85	1.82	6.5	1.83	A	You walk through the grocery aisles, adding necessary items to your cart.
+2530	2.15	1.45	3.32	1.7	3.09	1.6	A	You’ve been sick all week, lying on a lumpy couch with a bad cold.
+2540	5.54	1.19	3.38	1.75	6.7	1.67	B	You walk through the supermarket aisles checking things off your list as you pick each item you need off the shelves.
+2550	7.77	1.31	2.53	2.05	6.47	1.85	A	You lie lazily in the hammock as a gentle summer breeze rocks you.
+2560	8	1.29	5.05	2.08	5.95	1.7	A	You lounge around the crowded table, laughing with your family.
+2570	8.31	1.41	6.71	2.01	7.41	1.69	B	The boss smiles and shakes your hand.  “You’ll receive a very big raise in pay.  Good work!” he says.  Your heart skips a beat.  Someone shouts congratulations.  You smile back.
+2580	5.55	1.17	3.6	1.98	6.46	1.69	B	You run the comb through your hair, straighten your collar, smooth out the shirt’s wrinkles.  Water is running in the sink.  You turn it off and leave.
+2590	5.07	1.6	2.89	1.87	5.78	1.99	A	Sitting on the couch with the remote, you aimlessly flip through TV channels.
+2600	2.07	1.36	7.48	1.83	2.51	1.82	B	You’ve waited endlessly at the check-out counter.  Trapped.  Others crowd against you. There’s a sudden rushing in your head.  You gasp for breath, chest tight, temples throbbing.  Is it a heart attack?
+2610	5.37	1.32	3.13	1.69	6.11	1.76	B	You are sitting at the kitchen table with yesterday’s newspaper in front of you.  You push back the chair when you hear the coffee maker slow to a stop.
+2640	8.56	1.36	7.65	1.56	5.8	1.89	A	You laugh so hard with your friends that tears pour down your face.
+2670	7.47	1.47	2.66	1.64	6.9	1.83	B	A wood fire dances in the hearth, you feel snug and warm in the cabin, reading the book on your lap, enjoying a well-deserved rest.
+2750	2.43	1.31	6.33	1.83	4.3	1.89	B	A vagrant, wino, approaches you, yellow teeth and scabs on his face, clothes smelling of mold and urine. You cringe as his hand touches your sleeve.
+2770	8.2	1.39	6.49	1.81	6.89	1.82	B	She really likes your gift.  As soon she saw it, she screamed with joy:  “Thank you. It’s just perfect. Fantastic!”  Your heart beats with pleasure, when she leaps up and hugs you.
+2840	6.13	1.57	3.51	1.95	6.22	1.82	A	The tangles easily come out of your hair as you carefully brush through it.
+2850	6.84	1.53	4.46	1.94	7.06	1.52	B	You unfold the map, spread it out on the table, and with your finger trace a route south towards the beach. You refold the map, pick up your bag, and leave.
+2860	6.3	1.81	2.19	1.63	6.26	1.9	B	Its a quiet day, and without much to do you sit around your place, reading magazines and looking out the window.
+2880	4.63	1.14	4.96	1.56	4.4	1.51	A	Your friend whispers to you in a meeting, and you strain to catch the words.
+2900	1.57	1.11	7.97	1.82	3.24	2.7	A	At the party, you see your best friend secretly kissing your current lover.
+2910	1.63	1.34	5.49	2.6	2.03	1.69	A	Your heart sinks as you realize you love someone who does not love you.
+3300	1.54	1.38	8.18	1.5	2.3	2.07	A	Your friend is hit by a speeding car and blood pumps onto the road.
+3310	1.3	1.08	8.15	1.54	2.36	1.76	B	You flinch, at the screech of brakes; you look up, and see the speeding car slam into your friend. Her leg is crushed, the artery torn, and blood pumps on the road.
+4100	8.22	1.34	6.65	2.06	6.44	1.9	A	You raise your champagne glass and greet the new year with your lover.
+4300	7.59	1.8	7.63	1.68	5.23	2.13	B	As soon as you saw each other, the affair began.  You remember beautiful eyes looking straight into yours-- your heart in your throat, at the first touch.
+4400	8.28	1.22	7.91	1.5	5.9	1.96	B	You shiver as your bodies brush together.  You reach out.  You want to touch everywhere, kiss everywhere. You hear the words, “I love you”.
+4450	8.28	1.1	7.54	1.81	5.67	2.11	A	When your lover touches you, you moan softly and move closer.
+4600	8	1.37	7.17	2.24	5.85	1.77	B	Music murmurs in the background.  You’re together in the big bed, naked but apart, eyes locked.  You feel fingers barely touching, gliding softly along your thigh.
+4620	8.05	1.5	4.14	2.69	5.95	1.85	A	You walk hand in hand on the beach, not needing to say anything at all.
+4640	8.35	1.37	7.34	1.96	5.78	2	A	Your heart soars as you look into the familiar face of the one you love.
+4650	8.34	0.91	8.1	1.32	6.2	1.75	B	You are both aroused, breathless.  You fall together on the couch.  Kisses on your neck, face-- warm hands fumbling with clothing, hearts pounding.
+4670	8.15	1.28	8.01	1.4	5.73	2.13	B	A moan of pleasure. Your body responds slowly at first, languorously, and then with a more urgent rhythm. You feel gentle hands, a soft mouth, your back arches.
+4680	8.15	1.24	7.23	2.04	5.82	1.92	A	Together in bed, you feel the the gentle touch of naked skin against you.
+4700	8.5	0.95	6.81	2.47	6.51	1.82	B	You are lying together, legs over legs, arms around bodies--kisses deep and sweet.  In love on a blanket, beneath a tree, on a warm summer day.
+4710	8.46	1.28	8.3	1.31	5.33	2.25	A	Your skin tingles and you arch your back as your lover pleases you.
+5500	7.71	1.55	5.16	2.44	7.35	1.59	B	The mountain air is clear and cold.  The sun glistens on the powder as you head down the slope in gliding turns, mastering the mountain, moving with a sure, easy grace.
+5620	7.43	1.46	3.17	2.14	6	1.82	A	You lie on the warm sand listening to the sound of screeching gulls.
+5800	2.86	1.52	6.81	1.94	3	1.88	B	As you ease the car onto the wooden bridge, it groans.  In the headlights, a broken railing swings in the wind. A swift current rams against the pilings below.
+5900	1.81	1.51	7.98	1.45	1.83	1.5	A	You cringe as a fierce hurricane tears the roof off your house.
+6020	1.89	1.21	8.21	1.52	2.08	1.53	B	Without thinking, you stepped off the curb into traffic. Breaks screech. You look up, frozen, heart jumping in your chest.  A truck is skidding, hurtling towards you.
+6025	2.4	1.62	8.16	1.65	2.06	1.77	A	Your car skids wildly; you gasp as you realize you are losing control.
+6100	1.87	1.3	8.28	1.55	2.23	2.1	A	Alone in an alley, the street gang surrounds you, menacing, knives out.
+6370	2.11	1.84	8.04	1.71	1.82	1.82	A	You freeze as a masked figure looms over you and ties you to the bed.
+6400	2.56	1.65	8.09	1.49	3.55	2.55	A	Alone in the house, you freeze as you hear someone forcing the door.
+6600	2.13	1.42	6.72	1.89	4.3	2.07	A	The dog is sleeping quietly when the man kicks him out of the way.
+6800	2.5	1.35	7.5	1.65	3.3	2.01	B	It’s late at night in a poorly lit parking lot.  You tense, clutching the keys.  Your car stands alone in the distance, when footsteps sound behind you.
+6820	1.62	1.2	8.23	1.53	1.78	1.5	B	You’re alone in the alley in a bad part of the city.  A street gang slowly surrounds you, knives out, laughing with menace.  Your heart pounds as they close in.
+7040	5.04	0.91	4.17	1.9	5.65	1.78	A	You hold the flashlight steady in order to get a better look at the map.
+7050	8.48	1.32	7.76	1.54	6.16	2.04	A	You can’t believe it; you finally receive the gift you’ve always wanted.
+7100	4.19	1.35	6.26	1.87	4.24	1.68	A	The telephone rings continuously as you look around the room to find it.
+7250	5.74	1.43	4.63	1.98	5.9	1.84	A	You open the refrigerator and scan the shelves, searching for an evening snack.
+7300	1.75	1.21	6.74	1.81	3.58	1.89	B	You bite hungrily into the hamburger, and abruptly catch the putrid smell of spoiled meat. You spit out, and a greasy piece falls
+7340	2.54	1.92	6.62	1.98	3.22	1.92	A	Before smelling the rotten meat, you take a huge bite of the hamburger.
+7355	7.65	1.54	5.52	2.07	6.24	1.99	A	When the pizza arrives, you sink your teeth into thick layers of cheese.
+7380	1.92	1.14	6.89	1.77	3.95	1.77	B	You gag, seeing a roach moving slowly over the surface of the pizza.  You knock the pie on the floor.  Warm cheese spatters on your shoes.
+7496	7.98	1.35	6.97	1.77	6.43	1.96	A	You dance in the packed bar as your favorite DJ spins the tunes.
+7500	3.35	1.72	6.78	1.71	3.19	2.1	A	Alone in a unfamiliar city at dark, you try to find your way back.
+7595	5	1.21	4.47	1.9	5.56	1.98	A	You walk through the crowded parking lot, heading for your car.
+7600	8.32	0.98	6.66	1.8	6.39	2.05	A	The aroma of good food surrounds you; it’s your birthday dinner.
+8010	3.19	1.8	7.35	1.72	3	1.82	A	Huge waves knock over your canoe and you thrash in the water.
+8020	2.62	1.48	7.17	1.87	2.84	1.82	B	It’s your turn to speak to the group.  They’re all looking at you.  Your mouth’s dry and you can’t get the words out. Your heart pounds in the silent room.  Someone laughs.
+8025	4.92	1.96	7.89	1.58	4.4	2.46	A	Your heart pounds as you begin your speech in the auditorium.
+8030	2.66	1.49	6.2	2.05	2.93	1.87	B	Everyone’s talking, laughing together at the party. You’re alone-- tense, sweaty.  People glance at you and quickly look away. When asked your name, throat dry, you croak an answer.
+8033	8.22	1.3	6.62	2.23	6.72	1.64	B	The band is terrific.  The room vibrates with sound and your skin tingles.  You’re dancing together, moving effortlessly with the music. You’re feeling great!
+8040	1.9	1.24	7.66	1.76	2.12	1.63	B	Everyone’s staring at you, waiting for your presentation.  You’ve misplaced all your notes, graphics—everything’s lost!  What will you say?  They see you shaking, sweating-- mumbling stupidly.
+8190	7.51	1.56	6.17	2.16	6.63	2	A	Skiing down the mountain slopes, you glide easily over the powdery snow.
+8320	8.34	1.43	7.86	1.8	7.62	1.96	A	Your race car surges into the lead and everyone around you cheers.
+8330	8.1	1.52	5.48	2.25	7.82	1.59	B	You’ve successfully completed a difficult assignment. Your friends are enormously pleased for you— with pats on the back and welcome praise. You face is warm.  You can’t help smiling
+8350	6.39	1.57	5.18	2.18	6.84	1.72	B	Swimming laps, you are on a good pace. You turn your head to inhale, then prepare for your next flip turn.  You push off the wall and glide before beginning your stroke again.
+8380	8.37	1.29	8.15	1.25	7.56	2.05	A	It is a close game, and the crowd cheers as you drive in the winning run.
+8390	2.06	1.82	5.65	2.2	2.33	1.76	A	After you lost the game on an error, your teammates can’t look at you.
+8430	7.54	2.08	8.08	1.29	4.14	2.44	A	As the roller coaster car plunges down, you scream and raise your arms.
+8480	7.58	2.15	7.95	1.67	4.66	2.32	B	You tense as the roller coaster reaches the crest.  Then, you are all plunging down, screaming above the roar, together, laughing, and waving your arms.
+8500	8.47	1.45	8.16	1.65	7.17	2.17	B	The registered letter says that “You have just won ten million dollars!” It’s amazing—You bought the winning ticket in the lottery.  You cry, scream, jump with joy!
+8530	8.64	1.49	8.54	1.37	7.76	2.01	A	You’ve just won 10 million dollars; you jump up and down, screaming.
+8550	8.22	1.3	7.17	1.61	7.06	2.22	A	All eyes are on you as you walk into the dance with a beautiful date.
+8600	8.28	1.38	7.64	1.85	6.48	2.03	B	It’s the last few minutes of the big game and it’s close.  The crowd explodes in a deafening roar.  You jump up, cheering. Your team has come from behind to win.
+8610	8.4	1.35	7.86	1.54	7.82	1.85	A	At the net, you go up and block the volleyball perfectly, saving the game.
+8620	8.15	1.45	7.31	1.97	8.1	1.34	B	You sprint back to the other side of the court.  You lunge for the ball and hit a spectacular backhand down the line for the win.  You pump your fist in victory.
+8650	7.7	1.69	6.29	2.42	8.08	1.47	B	You are in a zone and have never played so well.  The ball seems to be moving in slow motion.  Every thing seems effortless.  You can execute and place the ball anywhere at will.
+8660	7.75	1.47	5.72	2.16	6.98	1.62	B	You won a free pass to the whole carnival.  Like kids again, you all jump on the merry-go-round, laughing as it turns, singing along with the music: “What a wonderful day!”
+8710	6.39	1.5	4.79	2.07	6.72	1.76	B	You are having a light workout today.  After a warm-up, a thin layer of sweat begins to form.  You stretch your quads and then start with some easy leg extensions.
+8750	5.92	1.63	5.93	2.05	6.54	1.74	B	Sweat drips down your face as you pedal the exercise bike.  You wipe your brow, then rest your forearms on the handle bars.
+8760	6.43	1.81	6.94	1.96	6.77	1.78	B	Running sprints, you breath hard and pump your arms.  Your legs feel heavy and your hamstrings burn as your come to the finish line.
+8770	7.41	1.61	8.03	1.54	7.44	1.97	A	Pure adrenaline keeps you going as you race toward the finish line.
+8780	6.12	1.52	5.76	2.14	7.16	1.69	B	Doing an overhead press, you exhale with force as you push the bar up.  You hold the weight at the top for a moment and then slowly bring it down, keeping good form.
+8790	6.22	1.83	6.24	1.87	6.87	1.84	B	Working hard and feeling the burn, you try to finish your last set of crunches.  As you complete the last repetition, your pace is very slow and your abs quiver in exhaustion.
+8800	8.28	1.44	7.41	1.96	7.77	1.67	B	Your heart pounds and tears begin to well up in your eyes.  You stand and lift your arms, waving as the crowd cheers – you’ve made it – tournament champion.
+9100	1.3	0.82	8.13	1.65	2.23	1.96	A	Clutching his chest, your father falls to the floor, unable to breathe.
+9180	2.54	1.78	6.9	1.61	3.52	2.13	A	A rabbit darts in front of your car; you are unable to avoid hitting it.
+9190	1.87	1.6	7.32	1.82	2.75	2.11	A	Your pet is lost; you gasp when you see a smear of blood on the road.
+9250	2.53	1.58	7.33	1.88	3.88	2.11	A	A car pulls in front of you, taking the last space; the driver laughs.
+9320	2.38	1.43	5.85	1.76	3.93	1.71	A	You gag as you enter the filthy bathroom; the toilet has overflowed.
+9340	1.84	1.23	6.39	1.96	3.82	1.9	B	The garbage can is upset.  Maggots crawl on the rotted food spilling out on the floor, staining the carpet.  Your throat tightens with a wave of nausea, but you must clean it up.
+9450	2.64	1.37	5.3	1.93	4.06	1.69	B	Something is caught on the sole of your shoe.  You reach down, and your hand comes away sticky with someone’s gum.  A piece adheres to your fingers.
+9500	1.7	1.25	7.09	1.96	3.42	1.96	B	You are leaving the concert when a drunk, smelling of smoke and alcohol, stumbles into you and throws up on your jacket. You retch as vomit drips onto your hand.
+9510	1.95	1.46	7.27	1.82	3.76	2.28	A	As you leave the concert, a drunk vomits all over your jacket, soaking it.
+9570	2.2	1.4	6.93	1.99	2.28	1.61	B	Your hands grip the dental chair.  You struggle to keep still. Mouth forced open, your jaw aches. You taste rubber and metal.  The dental drill whines in your ear.
+9580	2.81	1.54	6.1	1.82	3.04	1.78	B	Above his mask, the dentist frowns in concentration. He presses a hooked probe into your gum.  Saliva flows and you start to gag.  The technician adjusts the suction pipe.
+9590	2.3	1.44	7.18	1.89	2.42	1.67	B	On your back, trapped in the dental chair, helpless.  The dentist leans over you, pressing you down. The metal probe scrapes along a tooth, and you heart races.
+9600	3.47	1.91	6.03	2.01	3.44	1.9	A	The nurse sinks the needle from the IV bag into your upper arm.
+9650	2.57	1.87	7.39	1.97	2.83	2.03	A	You wince and scream as the doctor stitches a gaping wound on your arm.
+9700	2.63	1.53	7.18	1.94	2.28	1.61	B	A night landing in high winds: Your hands clutch the seat-arms in the swaying plane. Stomach queasy.  The engine coughs; stops; restarts with a strange whine.

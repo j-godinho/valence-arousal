@@ -39,11 +39,11 @@ def load_embeddings(args):
 	return embeddings_dict, 300
 
 def get_word_classification(args, embeddings, emb_dim):
-	dataset = pd.read_csv(args.wordratings)
+	dataset = pd.read_csv(args.wordratings, sep='\t')
 		
-	words = np.array(dataset["Word"])
-	arousals = np.array(dataset["A.Mean.Sum"]).reshape(-1,1)
-	valences = np.array(dataset["V.Mean.Sum"]).reshape(-1,1)
+	words = np.array(dataset["Description"])
+	arousals = np.array(dataset["Valence_value"]).reshape(-1,1)
+	valences = np.array(dataset["Arousal_value"]).reshape(-1,1)
 
 	# Normalization arousals and valences to -1 - 1 range
 	scalerA = MinMaxScaler(feature_range=(-1, 1))
