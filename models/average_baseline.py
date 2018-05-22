@@ -47,25 +47,19 @@ def load_sentences_data(args):
 	scalerV = MinMaxScaler(feature_range=(np.min(valences), np.max(valences)))
 	scalerA = MinMaxScaler(feature_range=(np.min(arousals), np.max(arousals)))
 	
-	#scalerV.fit(valences)
-	#scalerA.fit(arousals)
-
-	#sentences_dict = {sentences[i]: [valences[i], arousals[i]] for i in range(len(sentences))}
-
 	return sentences, valences, arousals, scalerV, scalerA
 
 def load_words_data(args, scalerV, scalerA):
 	dataset = pd.read_csv(args.words, sep='\t')
-	words = np.asarray(dataset["word1"])
-	valences = np.asarray(dataset["valence_value"]).reshape(-1, 1)
-	arousals = np.asarray(dataset["arousal_value"]).reshape(-1, 1)
+	words = np.asarray(dataset["Description"])
+	valences = np.asarray(dataset["Valence_value"]).reshape(-1, 1)
+	arousals = np.asarray(dataset["Arousal_value"]).reshape(-1, 1)
 
 	valences = scalerV.fit_transform(valences)
 	arousals = scalerA.fit_transform(arousals)
 
-	# TODO: Why is [0] necessary?
 	words = {words[i]: [valences[i],arousals[i]] for i in range(len(words))}
-	#print(words)
+
 	return words
 
 def train_avaliate_model(sentences, s_valences, s_arousals, words):
@@ -82,11 +76,13 @@ def train_avaliate_model(sentences, s_valences, s_arousals, words):
 			if(word in words.keys()):
 				score_v.append(words[word][0][0])
 				score_a.append(words[word][1][0])
-			else:
-				score_v.append(mean_val)
-				score_a.append(mean_arousal)
-		v_pred.append(sum(score_v) / len(score_v))
-		a_pred.append(sum(score_a) / len(score_a))
+
+		if(len(score_v) == 0):
+			v_pred.append(mean_val)
+			a_pred.append(mean_arousal)
+		else:
+			v_pred.append(sum(score_v) / len(score_v))
+			a_pred.append(sum(score_a) / len(score_a))
 
 	v_pred = np.asarray(v_pred).reshape(-1, 1)
 	a_pred = np.asarray(a_pred).reshape(-1, 1)

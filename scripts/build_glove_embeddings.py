@@ -62,16 +62,16 @@ def load_data(args):
 		sentences = np.array(dataset["sentence"])
 		data_type = 0
 		name = "combination.embs"
-	elif("Warriner" in args.data):
-		dataset = pd.read_csv(args.data)
-		words = np.array(dataset["Word"])
-		data_type = 1
-		name = "warriner.embs"
 	elif("ANET" in args.data):
 		dataset = pd.read_csv(args.data, sep='\t')
 		sentences = np.array(dataset["Sentence"])
 		data_type = 0
 		name = "anet.embs"
+	elif("Warriner" in args.data):
+		dataset = pd.read_csv(args.data)
+		words = np.array(dataset["Word"])
+		data_type = 1
+		name = "warriner.embs"
 	elif("nrc" in args.data):
 		dataset = pd.read_csv(args.data, sep='\t')
 		words = np.array(dataset['word1'])
@@ -82,7 +82,17 @@ def load_data(args):
 		words = np.array(dataset['Description'])
 		data_type = 1
 		name = "word_combination.embs"
-		
+	elif("ALL_SENTENCES" in args.data):
+		dataset1 = pd.read_csv(args.face)
+		dataset2 = pd.read_csv(args.emo, sep='\t')
+		dataset3 = pd.read_csv(args.anet, sep='\t')
+		sentences = np.array(dataset1["Anonymized Message"])
+		sentences = np.append(sentences, np.array(dataset2["sentence"]))
+		sentences = np.append(sentences, np.array(dataset3["Sentence"]))
+		data_type = 0
+		name="all_sentences.emb"
+
+
 	if(data_type == 0):
 		words = set()	
 		for sentence in sentences:
@@ -96,6 +106,9 @@ def receive_arguments():
 	parser = argparse.ArgumentParser()
 	parser.add_argument("--glove", help="glove vector file", type=str, required=True)
 	parser.add_argument("--data", help="data path", type=str, required=True)
+	parser.add_argument("--face", help="data path1", type=str, required=False)
+	parser.add_argument("--emo", help="data path2", type=str, required=False)
+	parser.add_argument("--anet", help="data path3", type=str, required=False)
 	args = parser.parse_args()
 	return args
 
