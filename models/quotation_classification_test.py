@@ -9,6 +9,7 @@ import argparse
 
 import pandas as pd
 from scipy.stats import pearsonr
+import scipy
 
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
@@ -52,6 +53,26 @@ def load_embeddings(args):
 
 	return embeddings_dict, len(embeddings_dict['the'])
 
+def get_statistics(arousals, valences):
+	mean_v = np.mean(valences)
+	std_v = np.std(valences)
+	median_v = np.median(valences)
+	#mode_v = scipy.stats.mode(valences)
+	min_v = np.min(valences)
+	max_v = np.max(valences)
+	len_v = len(valences)
+
+	mean_a = np.mean(arousals)
+	std_a = np.std(arousals)
+	median_a = np.median(arousals)
+	#mode_a = scipy.stats.mode(arousals)
+	min_a = np.min(arousals)
+	max_a = np.max(arousals)
+	len_a = len(arousals)
+
+	print("M_V: {}\t | STD_V: {}\t | MED_V: {}\t | MIN: {}\t | MAX: {}\t | LEN: {}".format(mean_v, std_v, median_v, min_v, max_v, len_v))
+	print("M_A: {}\t | STD_A: {}\t | MED_A: {}\t | MIN: {}\t | MAX: {}\t | LEN: {}".format(mean_a, std_a, median_a, min_a, max_a, len_a))
+
 def load_data(args):
 	print("[LOADING DATA]")
 
@@ -61,11 +82,13 @@ def load_data(args):
 		sentences = np.array(dataset["Anonymized Message"])
 		arousals = np.array(dataset["Arousal_mean"]).reshape(-1, 1)
 		valences = np.array(dataset["Valence_mean"]).reshape(-1, 1)
+		get_statistics(arousals, valences)
 
 		dataset2 = pd.read_csv(args.secondary, sep='\t')
 		sentences2 = np.array(dataset2["sentence"])
 		arousals2 = np.array(dataset2["Arousal"]).reshape(-1, 1)
 		valences2 = np.array(dataset2["Valence"]).reshape(-1, 1)
+		get_statistics(arousals2, valences2)
 	else:
 		dataset = pd.read_csv(args.data, sep='\t')
 		sentences = np.array(dataset["sentence"])
@@ -82,6 +105,23 @@ def load_data(args):
 	sentences3 = np.array(dataset3["Sentence"])
 	arousals3 = np.array(dataset3["AroMN"]).reshape(-1,1)
 	valences3 = np.array(dataset3["PlMN"]).reshape(-1,1)
+
+	get_statistics(arousals3, valences3)
+	
+	# Normalize To Same Range
+	min_v = np.min(valences)
+	max_v = np.max(valences)
+	min_a = np.min(arousals)
+	max_a = np.max(arousals)
+
+	scalerVM = MinMaxScaler(feature_range=(min_v, max_v))
+	scalerAM = MinMaxScaler(feature_range=(min_a, max_a))
+
+	valences2 = scalerVM.fit_transform(valences2)
+	arousals2 = scalerAM.fit_transform(arousals2)
+
+	valences3 = scalerVM.fit_transform(valences3)
+	arousals3 = scalerAM.fit_transform(arousals3)
 
 	words = set()
 	# Main
