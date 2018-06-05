@@ -25,7 +25,10 @@ try:
 except:
 	print("Failed to import matplotlib")	
 
-def handle_generalization(args, words_train, valences_train, arousals_train, words_dict):
+def handle_generalization(args, words_train, scores_train):
+	valences_train = scores_train[:,0]
+	arousals_train = scores_train[:,1]
+
 	dataset = pd.read_csv(args.anew, sep=',')
 	words = np.asarray(dataset["Description"])
 
@@ -51,8 +54,8 @@ def handle_generalization(args, words_train, valences_train, arousals_train, wor
 	print(len(words_train), len(valences_train), len(arousals_train), len(words), len(valences), len(arousals))
 
 	# Encode words to integers
-	x_train = np.array([words_dict[word] for word in words_train])
-	x_test = np.array([words_dict[word] for word in words])
+	x_train = encode_data(args, words_train)
+	x_test = encode_data(args, words)
 
 	return x_train, x_test, valences_train, valences, arousals_train, arousals
 
@@ -130,6 +133,7 @@ def receive_arguments():
 	parser.add_argument("--wordratings", help="path to dataset file", type=str, required=True)
 	parser.add_argument("--fasttext", help="use fasttext embeddings?", type=str, required=False)
 	parser.add_argument("--emb", help="pre trained vector embedding file", type=str, required=False)
+	parser.add_argument("--anew", help="path to generalization dataset file", type=str, required=True)
 	args = parser.parse_args()
 	return args
 
@@ -137,8 +141,10 @@ def main():
 	args = receive_arguments()
 	words, Y, scaler = load_data(args)
 
-	x_train, x_test, y_valence_train, y_valence_test, y_arousal_train, y_arousal_test = handle_generalization(args, words, Y, words_dict)
-	X = encode_data(args, words)
-	build_model(x_train, x_test, y_train, y_test)
+	x_train, x_test, y_valence_train, y_valence_test, y_arousal_train, y_arousal_test = handle_generalization(args, words, Y)
+	#X = encode_data(args, words)
+	y_test =  np.concatenate((y_valence_test, y_arousal_test), axis=1)
+	y_train = np.concatenate((y_valence_train, y_arousal_train), axis=1)
+	build_model(x_train, x_test, y_train, y_test, scaler)
 
 main()

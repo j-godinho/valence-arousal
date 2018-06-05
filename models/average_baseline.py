@@ -89,7 +89,6 @@ def train_avaliate_model(sentences, s_valences, s_arousals, words):
 
 	calculate_metrics(s_valences, s_arousals, v_pred, a_pred)
 
-
 def calculate_metrics(y_val, y_arou, pred_val, pred_arou):
 	valence_pearson = pearsonr(pred_val, y_val)[0]
 	arousal_pearson = pearsonr(pred_arou, y_arou)[0]
