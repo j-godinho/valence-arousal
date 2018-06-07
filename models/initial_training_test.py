@@ -85,10 +85,10 @@ def get_word_classification(args, embeddings, emb_dim):
 	words_dict = {w: i for i, w in enumerate(words)}		
 	 
 	# Normalize to same values
-	scalerV = MinMaxScaler(feature_range=(-1, 1))
+	scalerV = MinMaxScaler(feature_range=(0, 1))
 	valences = scalerV.fit_transform(valences)
 	
-	scalerA = MinMaxScaler(feature_range=(-1, 1))
+	scalerA = MinMaxScaler(feature_range=(0, 1))
 	arousals = scalerA.fit_transform(arousals)
 
 	x_train, x_test, y_valence_train, y_valence_test, y_arousal_train, y_arousal_test = handle_generalization(args, words, valences, arousals, words_dict)
@@ -122,8 +122,8 @@ def get_word_classification(args, embeddings, emb_dim):
 	flatten = Flatten()(embedding_layer)
 	dense_layer = Dense(120, name="initial_layer", activation="relu")
 	connection_dense = dense_layer(flatten)
-	valence_output = Dense(1, activation="tanh", name="valence_output")(connection_dense)
-	arousal_output = Dense(1, activation="tanh", name="arousal_output")(connection_dense)
+	valence_output = Dense(1, activation="sigmoid", name="valence_output")(connection_dense)
+	arousal_output = Dense(1, activation="sigmoid", name="arousal_output")(connection_dense)
 
 	model = Model(inputs=[input_layer], outputs=[valence_output, arousal_output])
 	

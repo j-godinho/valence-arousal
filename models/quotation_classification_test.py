@@ -140,8 +140,8 @@ def load_data(args):
 			words.add(word)
 
 	# Normalization
-	scalerV = MinMaxScaler(feature_range=(-1, 1))
-	scalerA = MinMaxScaler(feature_range=(-1, 1))
+	scalerV = MinMaxScaler(feature_range=(0, 1))
+	scalerA = MinMaxScaler(feature_range=(0, 1))
 	
 	valences = scalerV.fit_transform(valences)
 	arousals = scalerA.fit_transform(arousals)
@@ -181,7 +181,7 @@ def build_model(args, embeddings, emb_dim, vocab_size, max_len, words):
 	if(args.wordratings):
 		dense_layer = get_word_classification(args.wordratings)
 	else:
-		dense_layer = Dense(120, activation="tanh")
+		dense_layer = Dense(120, activation="relu")
 
 	# Embedding layer
 	#embeddings_matrix = np.zeros((vocab_size+1, emb_dim))
@@ -227,8 +227,8 @@ def build_model(args, embeddings, emb_dim, vocab_size, max_len, words):
 	else:
 		connection = rnn
 
-	valence_output = Dense(1, activation="tanh", name="valence_output")(connection)
-	arousal_output = Dense(1, activation="tanh", name="arousal_output")(connection)
+	valence_output = Dense(1, activation="sigmoid", name="valence_output")(connection)
+	arousal_output = Dense(1, activation="sigmoid", name="arousal_output")(connection)
 
 	# Build Model
 	model = Model(inputs=[input_layer], outputs=[valence_output, arousal_output])

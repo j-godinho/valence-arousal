@@ -70,7 +70,7 @@ def load_data(args):
 	Y = np.concatenate((valences, arousals), axis=1)
 	
 	# Normalization
-	scaler = MinMaxScaler(feature_range=(-1, 1))
+	scaler = MinMaxScaler(feature_range=(0, 1))
 	Y = scaler.fit_transform(Y)
 
 	return words, Y, scaler
