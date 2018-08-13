@@ -23,15 +23,17 @@ from keras.preprocessing import sequence
 from keras import optimizers
 from keras import backend as K
 from keras.callbacks import EarlyStopping
+from keras.models import load_model
 
 import gc
 import math
 
-from gensim.models import FastText
+#from gensim.models import FastText
 
 import nltk
 from nltk.tokenize import word_tokenize
 
+import pickle
 
 try: 
 	import matplotlib.pyplot as plt
@@ -73,13 +75,23 @@ def load_data(args):
 	
 	valences = scalerV.fit_transform(valences)
 	arousals = scalerA.fit_transform(arousals)
-	
+
+
 	words = set()	
 	for sentence in sentences:
 		for word in nltk.word_tokenize(sentence):
 			words.add(word)
 	
-	words_dict = {w: i for i, w in enumerate(words, start=1)}		
+	words = list(words)
+	#with open('saved_models/vocabulary.pkl', 'wb') as f:
+	#	pickle.dump(words, f)
+	
+	#model.save('saved_models/quotation_classification.h5') 
+
+	#print(words)
+
+	words_dict = {w: i for i, w in enumerate(words, start=1)}
+			
 	tokenized_sentences = [[words_dict[word] for word in nltk.word_tokenize(sentence)] for sentence in sentences]
 	vocab_size = len(words)	
 	encoded_docs = sequence.pad_sequences(tokenized_sentences)
@@ -181,6 +193,7 @@ def build_model(args, embeddings, emb_dim, vocab_size, max_len, words):
 		max_pooling = GlobalMaxPooling1DMasked()
 		connection = max_pooling(rnn)
 	elif(args.attention):
+		#con = TimeDistributed(Dense(120))(rnn)
 		attention = Attention()
 		connection = attention(rnn)
 	else:
@@ -191,6 +204,8 @@ def build_model(args, embeddings, emb_dim, vocab_size, max_len, words):
 
 	# Build Model
 	model = Model(inputs=[input_layer], outputs=[valence_output, arousal_output])
+
+	print(model.summary())
 	return model
 
 
@@ -235,6 +250,10 @@ def train_predict_model(model, x_train, x_test, y_valence_train, y_valence_test,
 	valence_mse = mean_squared_error(test_valence_predict, y_valence_test)
 	arousal_mse = mean_squared_error(test_arousal_predict, y_arousal_test)
 	
+	#print("[Saving Model]")
+	#model.save('saved_models/quotation_classification.h5') 
+	#print("[Done Saving Model]")
+
 	return valence_pearson, arousal_pearson, valence_mse, arousal_mse, valence_mae, arousal_mae
 
 def receive_arguments():

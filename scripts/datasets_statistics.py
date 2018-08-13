@@ -78,9 +78,9 @@ def load_data(args):
 
 	plot_boxes2(valences, arousals, names_to_plot, 211)
 	
-	valences = [v_anew, v_warriner, v_nrc, v_comb]
-	arousals = [a_anew, a_warriner, a_nrc, a_comb]
-	names_to_plot = ["ANEW", "Warriner", "NRC", "Combination"]
+	valences = [v_anew, v_warriner, v_nrc]
+	arousals = [a_anew, a_warriner, a_nrc]
+	names_to_plot = ["ANEW", "Warriner", "NRC"]
 	
 	plot_boxes2(valences, arousals, names_to_plot, 212)
 
@@ -94,7 +94,7 @@ def load_data(args):
 	plot_density(v_anew, a_anew, "ANEW", 245)
 	plot_density(v_warriner, a_warriner, "Warriner", 246)
 	plot_density(v_nrc, a_nrc, "NRC", 247)
-	plot_density(v_comb, a_comb, "Combination", 248)
+	#plot_density(v_comb, a_comb, "Combination", 248)
 
 	plt.show()
 

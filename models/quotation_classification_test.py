@@ -28,7 +28,7 @@ from keras.callbacks import EarlyStopping
 import gc
 import math
 
-from gensim.models import FastText
+#from gensim.models import FastText
 
 import nltk
 from nltk.tokenize import word_tokenize
@@ -113,9 +113,12 @@ def load_data(args):
 	max_v = np.max(valences)
 	min_a = np.min(arousals)
 	max_a = np.max(arousals)
-
+	
 	scalerVM = MinMaxScaler(feature_range=(min_v, max_v))
 	scalerAM = MinMaxScaler(feature_range=(min_a, max_a))
+
+	valences = scalerVM.fit_transform(valences)
+	arousals = scalerAM.fit_transform(arousals)
 
 	valences2 = scalerVM.fit_transform(valences2)
 	arousals2 = scalerAM.fit_transform(arousals2)

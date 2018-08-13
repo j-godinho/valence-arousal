@@ -21,7 +21,7 @@ from keras.layers import Dense, Activation, Embedding, Flatten, Dropout, InputLa
 from keras import optimizers
 from keras.callbacks import EarlyStopping
 
-from gensim.models import FastText
+#from gensim.models import FastText
 
 try: 
 	import matplotlib.pyplot as plt
@@ -69,8 +69,6 @@ def handle_generalization(args, words_train, valences_train, arousals_train, wor
 	# Encode words to integers
 	x_train = np.array([words_dict[word] for word in words_train])
 	x_test = np.array([words_dict[word] for word in words])
-
-	
 
 	return x_train, x_test, valences_train, valences, arousals_train, arousals
 
