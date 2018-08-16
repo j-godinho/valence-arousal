@@ -120,6 +120,7 @@ def get_word_classification(args, embeddings, emb_dim):
 	flatten = Flatten()(embedding_layer)
 	dense_layer = Dense(120, name="initial_layer", activation="relu")
 	connection_dense = dense_layer(flatten)
+	connection_dense = Dropout(0.2)(connection_dense)
 	valence_output = Dense(1, activation="sigmoid", name="valence_output")(connection_dense)
 	arousal_output = Dense(1, activation="sigmoid", name="arousal_output")(connection_dense)
 
@@ -135,9 +136,10 @@ def get_word_classification(args, embeddings, emb_dim):
 	history = model.fit(	x_train, 
 							{"valence_output": y_valence_train, "arousal_output": y_arousal_train}, 
 							validation_data=(x_test, {"valence_output": y_valence_test, "arousal_output": y_arousal_test}), 
-							batch_size=5, 
-							epochs=100,
-							callbacks = [earlyStopping])
+							batch_size=20, 
+							epochs=10,
+							#callbacks = [earlyStopping]
+							)
 
 	# Evaluation
 	test_predict = np.array(model.predict(x_test))

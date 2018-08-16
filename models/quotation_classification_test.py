@@ -5,6 +5,13 @@ os.environ['PYTHONHASHSEED'] = '0'
 np.random.seed(42)
 rn.seed(12345)
 
+import tensorflow as tf
+session_conf = tf.ConfigProto(intra_op_parallelism_threads=1, inter_op_parallelism_threads=1)
+from keras import backend as K
+tf.set_random_seed(1234)
+sess = tf.Session(graph=tf.get_default_graph(), config=session_conf)
+K.set_session(sess)
+
 import argparse
 
 import pandas as pd
@@ -219,16 +226,20 @@ def build_model(args, embeddings, emb_dim, vocab_size, max_len, words):
 	# Max Pooling and attention
 	if(args.maxpooling and args.attention):
 		max_pooling = GlobalMaxPooling1DMasked()(rnn)
-		attention = Attention()(rnn)
+		con = TimeDistributed(Dense(100))(rnn)
+		attention = Attention()(con)
 		connection = concatenate([max_pooling, attention])
 	elif(args.maxpooling):
 		max_pooling = GlobalMaxPooling1DMasked()
 		connection = max_pooling(rnn)
 	elif(args.attention):
+		con = TimeDistributed(Dense(100))(rnn)
 		attention = Attention()
-		connection = attention(rnn)
+		connection = attention(con)
 	else:
 		connection = rnn
+
+	connection = Dropout(0.2)(connection)
 
 	valence_output = Dense(1, activation="sigmoid", name="valence_output")(connection)
 	arousal_output = Dense(1, activation="sigmoid", name="arousal_output")(connection)
@@ -252,10 +263,11 @@ def train_predict_model(model, x_train, x_test, y_valence_train, y_valence_test,
 	# Training
 	history = model.fit( x_train, 
 						{"valence_output": y_valence_train, "arousal_output": y_arousal_train}, 
-						validation_data=(x_test, {"valence_output": y_valence_test, "arousal_output": y_arousal_test}), 
+						#validation_data=(x_test, {"valence_output": y_valence_test, "arousal_output": y_arousal_test}), 
 						batch_size=20, 
-						epochs=100,
-						callbacks = [earlyStopping])
+						epochs=10,
+						#callbacks = [earlyStopping]
+						)
 	
 	# Predictions
 	test_predict = model.predict(x_test)

@@ -5,6 +5,13 @@ os.environ['PYTHONHASHSEED'] = '0'
 np.random.seed(42)
 rn.seed(12345)
 
+import tensorflow as tf
+session_conf = tf.ConfigProto(intra_op_parallelism_threads=1, inter_op_parallelism_threads=1)
+from keras import backend as K
+tf.set_random_seed(1234)
+sess = tf.Session(graph=tf.get_default_graph(), config=session_conf)
+K.set_session(sess)
+
 import argparse
 
 import pandas as pd
@@ -144,8 +151,12 @@ def k_fold(args, embeddings, emb_dim, vocab_size, max_len, words, X, Y, scalerV,
 																								np.mean(arousal_mae),
 																								np.mean(valence_mse), 
 																								np.mean(arousal_mse)))
-	
-
+	print("[VAR]: V_p:{} | A_p:{} | V_mae:{} | A_mae:{} | V_mse:{} | A_mse:{}".format(			np.var(valence_cor), 
+																								np.var(arousal_cor),
+																								np.var(valence_mae),
+																								np.var(arousal_mae),
+																								np.var(valence_mse), 
+																								np.var(arousal_mse)))
 
 def build_model(args, embeddings, emb_dim, vocab_size, max_len, words):
 
@@ -183,21 +194,24 @@ def build_model(args, embeddings, emb_dim, vocab_size, max_len, words):
 		rnn_layer = GRU(units=64, return_sequences=(args.attention or args.maxpooling))
 
 	rnn = Bidirectional(rnn_layer)(layer1)
-
+	#rnn = Dropout(0.5)(rnn)
 	# Max Pooling and attention
 	if(args.maxpooling and args.attention):
 		max_pooling = GlobalMaxPooling1DMasked()(rnn)
-		attention = Attention()(rnn)
+		con = TimeDistributed(Dense(100))(rnn)
+		attention = Attention()(con)
 		connection = concatenate([max_pooling, attention])
 	elif(args.maxpooling):
 		max_pooling = GlobalMaxPooling1DMasked()
 		connection = max_pooling(rnn)
 	elif(args.attention):
-		#con = TimeDistributed(Dense(120))(rnn)
+		con = TimeDistributed(Dense(100))(rnn)
 		attention = Attention()
-		connection = attention(rnn)
+		connection = attention(con)
 	else:
 		connection = rnn
+
+	connection = Dropout(args.dropout)(connection)
 
 	valence_output = Dense(1, activation="sigmoid", name="valence_output")(connection)
 	arousal_output = Dense(1, activation="sigmoid", name="arousal_output")(connection)
@@ -211,7 +225,7 @@ def build_model(args, embeddings, emb_dim, vocab_size, max_len, words):
 
 def train_predict_model(model, x_train, x_test, y_valence_train, y_valence_test, y_arousal_train, y_arousal_test, scalerV, scalerA):
 
-	earlyStopping = EarlyStopping(patience=1)
+	#earlyStopping = EarlyStopping(monitor="val_loss", patience=3)
 
 	adamOpt = keras.optimizers.Adam(lr=0.001, amsgrad=True)
 
@@ -224,9 +238,11 @@ def train_predict_model(model, x_train, x_test, y_valence_train, y_valence_test,
 	history = model.fit( x_train, 
 						{"valence_output": y_valence_train, "arousal_output": y_arousal_train}, 
 						validation_data=(x_test, {"valence_output": y_valence_test, "arousal_output": y_arousal_test}), 
+						#validation_split=0.1,
 						batch_size=20, 
-						epochs=100,
-						callbacks = [earlyStopping])
+						epochs=10,
+						#callbacks = [earlyStopping]
+						)
 	
 	# Predictions
 	test_predict = model.predict(x_test)
@@ -266,6 +282,7 @@ def receive_arguments():
 	parser.add_argument("--attention", help="use attention layer", action="store_true")
 	parser.add_argument("--maxpooling", help="use MaxPooling layer", action="store_true")
 	parser.add_argument("--rnn", help="type of recurrent layer <LSTM>|<GRU>", type=str, required=True)
+	parser.add_argument("--dropout", help="value of dropout", type=float, required=False, default=0.0)
 	args = parser.parse_args()
 	return args
 

@@ -6,6 +6,13 @@ np.random.seed(42)
 rn.seed(12345)
 from keras import backend as K
 
+import tensorflow as tf
+session_conf = tf.ConfigProto(intra_op_parallelism_threads=1, inter_op_parallelism_threads=1)
+from keras import backend as K
+tf.set_random_seed(1234)
+sess = tf.Session(graph=tf.get_default_graph(), config=session_conf)
+K.set_session(sess)
+
 import argparse
 import pandas as pd
 
@@ -22,7 +29,7 @@ from keras.layers import Dense, Activation, Embedding, Flatten, Dropout, InputLa
 from keras import optimizers
 from keras.callbacks import EarlyStopping
 
-from gensim.models import FastText
+#from gensim.models import FastText
 
 try: 
 	import matplotlib.pyplot as plt
@@ -42,8 +49,8 @@ def load_embeddings(args):
 def load_data(args):
 	dataset = pd.read_csv(args.wordratings, sep='\t')
 	words = np.array(dataset["Description"])
-	arousals = np.array(dataset["Valence_value"]).reshape(-1,1)
-	valences = np.array(dataset["Arousal_value"]).reshape(-1,1)
+	valences = np.array(dataset["Valence_value"]).reshape(-1,1)
+	arousals = np.array(dataset["Arousal_value"]).reshape(-1,1)
 
 	# Normalization arousals and valences to -1 - 1 range
 	scalerA = MinMaxScaler(feature_range=(0, 1))
@@ -96,6 +103,12 @@ def k_fold(args, embeddings, emb_dim, words, X, Y, scalerV, scalerA):
 																								np.mean(arousal_mae),
 																								np.mean(valence_mse), 
 																								np.mean(arousal_mse)))
+	print("[VAR]: V_p:{} | A_p:{} | V_mae:{} | A_mae:{} | V_mse:{} | A_mse:{}".format(			np.var(valence_cor), 
+																								np.var(arousal_cor),
+																								np.var(valence_mae),
+																								np.var(arousal_mae),
+																								np.var(valence_mse), 
+																								np.var(arousal_mse)))
 
 def build_model(args, embeddings, emb_dim, words):
 	# Build embeddings layer
@@ -118,6 +131,7 @@ def build_model(args, embeddings, emb_dim, words):
 	flatten = Flatten()(embedding_layer)
 	dense_layer = Dense(120, name="initial_layer", activation="relu")
 	connection_dense = dense_layer(flatten)
+	connection_dense = Dropout(0.2)(connection_dense)
 	valence_output = Dense(1, activation="sigmoid", name="valence_output")(connection_dense)
 	arousal_output = Dense(1, activation="sigmoid", name="arousal_output")(connection_dense)
 
@@ -127,7 +141,7 @@ def build_model(args, embeddings, emb_dim, words):
 def train_predict_model(model, x_train, x_test, y_valence_train, y_valence_test, y_arousal_train, y_arousal_test, scalerV, scalerA):
 		
 	adamOpt = keras.optimizers.Adam(lr=0.001, amsgrad=True)
-	earlyStopping = EarlyStopping(patience=1)
+	earlyStopping = EarlyStopping(patience=3)
 
 	# Compilation
 	model.compile(loss={"valence_output" : "mean_squared_error", "arousal_output" : "mean_squared_error"}, optimizer=adamOpt)
@@ -136,9 +150,11 @@ def train_predict_model(model, x_train, x_test, y_valence_train, y_valence_test,
 	history = model.fit(	x_train, 
 							{"valence_output": y_valence_train, "arousal_output": y_arousal_train}, 
 							validation_data=(x_test, {"valence_output": y_valence_test, "arousal_output": y_arousal_test}), 
-							batch_size=5, 
-							epochs=100,
-							callbacks = [earlyStopping])
+							#validation_split=0.1,
+							batch_size=20, 
+							epochs=10,
+							#callbacks = [earlyStopping]
+							)
 
 	# Evaluation
 	test_predict = np.array(model.predict(x_test))
