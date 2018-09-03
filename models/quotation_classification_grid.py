@@ -111,7 +111,7 @@ def get_word_classification(path):
 	return initial_layer
 
 
-def k_fold(args, embeddings, emb_dim, vocab_size, max_len, words, X, Y, scalerV, scalerA):
+def k_fold(args, embeddings, emb_dim, vocab_size, max_len, words, X, Y, scalerV, scalerA, dropout, epochs):
 	valence_cor = []
 	arousal_cor = []
 	valence_mse = []
@@ -131,8 +131,8 @@ def k_fold(args, embeddings, emb_dim, vocab_size, max_len, words, X, Y, scalerV,
 		y_arousal_train = Y[train][:,1]
 		y_arousal_test =  Y[test][:,1]
 
-		model = build_model(args, embeddings, emb_dim, vocab_size, max_len, words)
-		v_pearson, a_pearson, v_mse, a_mse, v_mae, a_mae = train_predict_model(model, x_train, x_test, y_valence_train, y_valence_test, y_arousal_train, y_arousal_test, scalerV, scalerA)
+		model = build_model(args, embeddings, emb_dim, vocab_size, max_len, words, dropout)
+		v_pearson, a_pearson, v_mse, a_mse, v_mae, a_mae = train_predict_model(model, x_train, x_test, y_valence_train, y_valence_test, y_arousal_train, y_arousal_test, scalerV, scalerA, dropout, epochs)
 
 		valence_cor.append(v_pearson)
 		arousal_cor.append(a_pearson)
@@ -144,41 +144,52 @@ def k_fold(args, embeddings, emb_dim, vocab_size, max_len, words, X, Y, scalerV,
 		print("Index:{0} - V_p:{1} | A_p:{2} | V_mae:{3} | A_mae:{4} | V_mse:{5} | A_mse:{6}".format(i, v_pearson, a_pearson, v_mae, a_mae, v_mse, a_mse))
 		i = i + 1
 	
+	valence_cor_mean = np.mean(valence_cor)
+	arousal_cor_mean = np.mean(arousal_cor)
+	valence_mae_mean = np.mean(valence_mae)
+	arousal_mae_mean = np.mean(arousal_mae)
+	valence_mse_mean = np.mean(valence_mse)
+	arousal_mse_mean = np.mean(arousal_mse)
+
+	valence_cor_var = np.var(valence_cor)
+	arousal_cor_var = np.var(arousal_cor)
+	valence_mae_var = np.var(valence_mae)
+	arousal_mae_var = np.var(arousal_mae)
+	valence_mse_var = np.var(valence_mse)
+	arousal_mse_var = np.var(arousal_mse)
+
+	
 	print("[MEAN]: args: {} | V_p:{} | A_p:{} | V_mae:{} | A_mae:{} | V_mse:{} | A_mse:{}".format(args,	
-																								np.mean(valence_cor), 
-																								np.mean(arousal_cor),
-																								np.mean(valence_mae),
-																								np.mean(arousal_mae),
-																								np.mean(valence_mse), 
-																								np.mean(arousal_mse)))
-	print("[VAR]: V_p:{} | A_p:{} | V_mae:{} | A_mae:{} | V_mse:{} | A_mse:{}".format(			np.var(valence_cor), 
-																								np.var(arousal_cor),
-																								np.var(valence_mae),
-																								np.var(arousal_mae),
-																								np.var(valence_mse), 
-																								np.var(arousal_mse)))
-	save_data(valence_cor, arousal_cor, valence_mae, arousal_mae, valence_mse, arousal_mse)
+																								valence_cor_mean, 
+																								arousal_cor_mean,
+																								valence_mae_mean,
+																								arousal_mae_mean,
+																								valence_mse_mean, 
+																								arousal_mse_mean))
+	print("[VAR]: V_p:{} | A_p:{} | V_mae:{} | A_mae:{} | V_mse:{} | A_mse:{}".format(			valence_cor_var, 
+																								arousal_cor_var,
+																								valence_mae_var,
+																								arousal_mae_var,
+																								valence_mse_var, 
+																								arousal_mse_var))
+	with open("grid_search_resultsEmo", "a+") as file:
+		file.write("{},{},{},{},{},{},{},{},{},{},{},{},{},{}\n".format(	epochs,
+																			dropout,
+																			valence_cor_mean, 
+																			arousal_cor_mean, 
+																			valence_mae_mean, 
+																			arousal_mae_mean, 
+																			valence_mse_mean, 
+																			arousal_mse_mean, 
+																			valence_cor_var,
+																			arousal_cor_var,
+																			valence_mae_var,
+																			arousal_mae_var,
+																			valence_mse_var,
+																			arousal_mse_var))
+							
 
-def save_data(valence_cor, arousal_cor, valence_mae, arousal_mae, valence_mse, arousal_mse):
-	path = 'plot_classificationEmo'
-	if not os.path.exists(path):
-		os.makedirs(path)
-
-	with open(path+"/valence_cor", 'wb') as f:
-		pickle.dump(valence_cor, f)
-	with open(path+"/arousal_cor", 'wb') as f:
-		pickle.dump(arousal_cor, f)
-	with open(path+"/valence_mae", 'wb') as f:
-		pickle.dump(valence_mae, f)
-	with open(path+"/arousal_mae", 'wb') as f:
-		pickle.dump(arousal_mae, f)
-	with open(path+"/valence_mse", 'wb') as f:
-		pickle.dump(valence_mse, f)
-	with open(path+"/arousal_mse", 'wb') as f:
-		pickle.dump(arousal_mse, f)
-
-
-def build_model(args, embeddings, emb_dim, vocab_size, max_len, words):
+def build_model(args, embeddings, emb_dim, vocab_size, max_len, words, dropout):
 
 	if(args.wordratings):
 		dense_layer = get_word_classification(args.wordratings)
@@ -231,7 +242,7 @@ def build_model(args, embeddings, emb_dim, vocab_size, max_len, words):
 	else:
 		connection = rnn
 
-	connection = Dropout(args.dropout)(connection)
+	connection = Dropout(dropout)(connection)
 
 	valence_output = Dense(1, activation="sigmoid", name="valence_output")(connection)
 	arousal_output = Dense(1, activation="sigmoid", name="arousal_output")(connection)
@@ -241,11 +252,12 @@ def build_model(args, embeddings, emb_dim, vocab_size, max_len, words):
 
 	print(model.summary())
 	return model
+			 
 
+def train_predict_model(model, x_train, x_test, y_valence_train, y_valence_test, y_arousal_train, y_arousal_test, scalerV, scalerA, dropout, epochs):
 
-def train_predict_model(model, x_train, x_test, y_valence_train, y_valence_test, y_arousal_train, y_arousal_test, scalerV, scalerA):
+	earlyStopping = EarlyStopping(monitor="loss", patience=3)
 
-	#earlyStopping = EarlyStopping(monitor="val_loss", patience=3)
 
 	adamOpt = keras.optimizers.Adam(lr=0.001, amsgrad=True)
 
@@ -260,10 +272,16 @@ def train_predict_model(model, x_train, x_test, y_valence_train, y_valence_test,
 						validation_data=(x_test, {"valence_output": y_valence_test, "arousal_output": y_arousal_test}), 
 						#validation_split=0.1,
 						batch_size=20, 
-						epochs=10,
-						#callbacks = [earlyStopping]
+						epochs=epochs,
+						callbacks = [earlyStopping]
 						)
-	
+
+	return predict_metrics(model, x_test, y_valence_test, y_arousal_test, scalerV, scalerA)
+	#print("[Saving Model]")
+	#model.save('saved_models/quotation_classification.h5') 
+	#print("[Done Saving Model]")
+
+def predict_metrics(model, x_test, y_valence_test, y_arousal_test, scalerV, scalerA):
 	# Predictions
 	test_predict = model.predict(x_test)
 
@@ -285,10 +303,6 @@ def train_predict_model(model, x_train, x_test, y_valence_train, y_valence_test,
 	arousal_mae = mean_absolute_error(test_arousal_predict, y_arousal_test)
 	valence_mse = mean_squared_error(test_valence_predict, y_valence_test)
 	arousal_mse = mean_squared_error(test_arousal_predict, y_arousal_test)
-	
-	#print("[Saving Model]")
-	#model.save('saved_models/quotation_classification.h5') 
-	#print("[Done Saving Model]")
 
 	return valence_pearson, arousal_pearson, valence_mse, arousal_mse, valence_mae, arousal_mae
 
@@ -302,7 +316,6 @@ def receive_arguments():
 	parser.add_argument("--attention", help="use attention layer", action="store_true")
 	parser.add_argument("--maxpooling", help="use MaxPooling layer", action="store_true")
 	parser.add_argument("--rnn", help="type of recurrent layer <LSTM>|<GRU>", type=str, required=True)
-	parser.add_argument("--dropout", help="value of dropout", type=float, required=False, default=0.0)
 	args = parser.parse_args()
 	return args
 
@@ -310,6 +323,9 @@ def main():
 	args = receive_arguments()
 	X, Y, vocab_size, max_len, words, scalerV, scalerA = load_data(args)
 	embeddings, emb_dim = load_embeddings(args)
-	k_fold(args, embeddings, emb_dim, vocab_size, max_len, words, X, Y, scalerV, scalerA)
+	for dropout in [0.0, 0.1, 0.2, 0.3, 0.4]:
+	#for dropout in [0.4]:
+		for epochs in [5, 10, 15, 20, 25]:
+			k_fold(args, embeddings, emb_dim, vocab_size, max_len, words, X, Y, scalerV, scalerA, dropout, epochs)
 
 main()
