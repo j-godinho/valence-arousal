@@ -49,6 +49,7 @@ except:
 	
 from custom_layers.GlobalMaxPooling1DMasked import *
 from custom_layers.Attention import *
+from custom_layers.nested_lstm import NestedLSTM
 
 
 def load_embeddings(args):	
@@ -157,7 +158,7 @@ def k_fold(args, embeddings, emb_dim, vocab_size, max_len, words, X, Y, scalerV,
 																								np.var(arousal_mae),
 																								np.var(valence_mse), 
 																								np.var(arousal_mse)))
-	save_data(valence_cor, arousal_cor, valence_mae, arousal_mae, valence_mse, arousal_mse)
+	#save_data(valence_cor, arousal_cor, valence_mae, arousal_mae, valence_mse, arousal_mse)
 
 def save_data(valence_cor, arousal_cor, valence_mae, arousal_mae, valence_mse, arousal_mse):
 	path = 'plot_classificationEmo'
@@ -207,13 +208,17 @@ def build_model(args, embeddings, emb_dim, vocab_size, max_len, words):
 
 	layer1 = TimeDistributed(dense_layer)(embedding_layer)
 
-	# Recurrent layer. Either LSTM or GRU
-	if(args.rnn == "LSTM"):
-		rnn_layer = LSTM(units=64, return_sequences=(args.attention or args.maxpooling))
+	if(args.rnn == "NESTED"):
+		rnn = NestedLSTM(units=64, depth=2, return_sequences=(args.attention or args.maxpooling))(layer1)
 	else:
-		rnn_layer = GRU(units=64, return_sequences=(args.attention or args.maxpooling))
+		# Recurrent layer. Either LSTM or GRU
+		if(args.rnn == "LSTM"):
+			rnn_layer = LSTM(units=64, return_sequences=(args.attention or args.maxpooling))
+		else:
+			rnn_layer = GRU(units=64, return_sequences=(args.attention or args.maxpooling))
 
-	rnn = Bidirectional(rnn_layer)(layer1)
+		rnn = Bidirectional(rnn_layer)(layer1)
+
 	#rnn = Dropout(0.5)(rnn)
 	# Max Pooling and attention
 	if(args.maxpooling and args.attention):
@@ -301,7 +306,7 @@ def receive_arguments():
 	parser.add_argument("--k", help="number of foldings", type=int, required=True)
 	parser.add_argument("--attention", help="use attention layer", action="store_true")
 	parser.add_argument("--maxpooling", help="use MaxPooling layer", action="store_true")
-	parser.add_argument("--rnn", help="type of recurrent layer <LSTM>|<GRU>", type=str, required=True)
+	parser.add_argument("--rnn", help="type of recurrent layer <LSTM>|<GRU>|<NESTED>", type=str, required=True)
 	parser.add_argument("--dropout", help="value of dropout", type=float, required=False, default=0.0)
 	args = parser.parse_args()
 	return args
